@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* Zener ID brand (brand_assets/README.md): Deep Pine #06302B, Evergreen #0F5246,
+   Mint #2FE0A8, Citrus #D9F26B, Paper #F3F7F2, Ink #0B1614. Headings in Manrope,
+   body in Inter. Colours are flat: no decorative gradients. */
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@theme {
+  --color-brand: #0f5246;
+  --color-brand-deep: #06302b;
+  --color-brand-sky: #2fe0a8;
+  --color-brand-tint: #e7f5ef;
+  --color-citrus: #d9f26b;
+  --color-paper: #f3f7f2;
+
+  --color-ink: #0b1614;
+  --color-body: #34413e;
+  --color-muted: #66746f;
+  --color-line: #e2e8e5;
+  --color-mist: #f6f8f7;
+  --color-cloud: #edf1ef;
+
+  --color-navy: #06302b;
+  --color-navy-2: #0b3d36;
+
+  --color-pass: #0f7a4b;
+  --color-pass-tint: #e5f4ec;
+  --color-review: #8a6d00;
+  --color-review-tint: #f7f3e1;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Anything that can be pressed says so. In the base layer, so a utility such as
+   cursor-default still wins where one is set. */
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="option"],
+  summary {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+::selection {
+  background: var(--color-brand-tint);
+  color: var(--color-brand-deep);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scan {
+  0% { top: 12%; }
+  50% { top: 82%; }
+  100% { top: 12%; }
+}
+
+/* The hero reel: the scan ring filling round a face, and a pin landing on the globe. */
+@keyframes ring-fill {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* The middle face once it passes: it blurs and turns green, then shrinks away to a dot. */
+@keyframes face-out {
+  0% { filter: none; scale: 1; }
+  40% { filter: blur(5px) saturate(0.6); scale: 1; }
+  85% { scale: 0.12; }
+  100% { filter: blur(5px) saturate(0.6); scale: 0; }
+}
+
+@keyframes wash-in {
+  0% { opacity: 0; }
+  40%, 100% { opacity: 0.9; }
+}
+
+/* The scan ring follows the face down, its ticks closing into a solid ring first. */
+@keyframes ring-out {
+  0%, 40% { scale: 1; }
+  85% { scale: 0.12; }
+  100% { scale: 0; }
+}
+
+@keyframes ticks-out {
+  0% { opacity: 1; }
+  40%, 100% { opacity: 0; }
+}
+
+@keyframes solid-in {
+  0%, 15% { opacity: 0; }
+  40%, 100% { opacity: 1; }
+}
+
+/* A tab's progress bar, filling while its group shows (components/platform.tsx). */
+@keyframes tab-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes pin-drop {
+  0% { opacity: 0; translate: 0 -14px; scale: 0.6; }
+  60% { opacity: 1; translate: 0 2px; scale: 1.05; }
+  100% { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+@utility animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@utility animate-scan {
+  animation: scan 3.2s ease-in-out infinite;
+}
+
+@utility animate-ring-fill {
+  animation: ring-fill var(--scan-ms, 1100ms) linear var(--scan-delay, 0ms) both;
+}
+
+@utility animate-face-out {
+  animation: face-out var(--leave-ms) ease-in var(--leave-delay) both;
+}
+
+@utility animate-wash-in {
+  animation: wash-in var(--leave-ms) ease-in var(--leave-delay) both;
+}
+
+@utility animate-ring-out {
+  animation: ring-out var(--leave-ms) ease-in var(--leave-delay) both;
+}
+
+@utility animate-ticks-out {
+  animation: ticks-out var(--leave-ms) ease-in var(--leave-delay) both;
+}
+
+@utility animate-solid-in {
+  animation: solid-in var(--leave-ms) ease-in var(--leave-delay) both;
+}
+
+@utility animate-pin-drop {
+  animation: pin-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-scan, .animate-fade-up, .animate-pin-drop, .animate-face-out, .animate-wash-in, .animate-ring-out, .animate-ticks-out, .animate-solid-in { animation: none; }
+}
+
+/* Grainy brand backgrounds (brand guidelines: "Dark gradient"). Gradients are for
+   backgrounds and large graphics only, never for buttons. */
+:root {
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='l' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  9 0 0 0 -4.9'/%3E%3C/filter%3E%3Cfilter id='d' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -9 0 0 0 4.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23l%29'/%3E%3Crect width='100%25' height='100%25' filter='url%28%23d%29'/%3E%3C/svg%3E");
+}
+
+@utility bg-noise {
+  background-image: var(--noise);
+  background-size: 240px 240px;
+}
+
+/* Deep Pine base; Mint glow bottom right, Citrus glow top right, Evergreen glow bottom left. */
+@utility bg-brand-dark {
+  background-color: #06302b;
+  background-image:
+    radial-gradient(60% 70% at 100% 100%, rgb(47 224 168 / 0.42), transparent 70%),
+    radial-gradient(45% 55% at 100% 0%, rgb(217 242 107 / 0.26), transparent 70%),
+    radial-gradient(70% 80% at 0% 100%, rgb(15 82 70 / 0.95), transparent 70%);
+}
+
+/* Paper base; soft Mint glow top right, Citrus bottom left, Mint bottom right (brand "Light gradient", toned down). */
+@utility bg-brand-light {
+  background-color: #f3f7f2;
+  background-image:
+    radial-gradient(55% 60% at 100% 0%, rgb(47 224 168 / 0.32), transparent 70%),
+    radial-gradient(55% 60% at 0% 100%, rgb(217 242 107 / 0.38), transparent 70%),
+    radial-gradient(45% 50% at 100% 100%, rgb(47 224 168 / 0.18), transparent 70%);
+}
